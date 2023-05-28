@@ -1,40 +1,38 @@
+
+
 @php
+    
+    // SDK de Mercado Pago
+    require base_path('/vendor/autoload.php');
+    // Agrega credenciales
+    MercadoPago\SDK::setAccessToken(config('services.mercadopago.token'));
+    
+    // Crea un objeto de preferencia
+    $preference = new MercadoPago\Preference();
+    $shipments = new MercadoPago\Shipments();
 
-require base_path('/vendor/autoload.php');
-// Agrega credenciales
-MercadoPago\SDK::setAccessToken(config('services.mercadopago.token'));
+    $shipments->cost = $order->shipping_cost;
+    $shipments->mode = "not_specified";
 
-// Crea un objeto de preferencia
-$preference = new MercadoPago\Preference();
-
-//objeto para el costo de envio
-$shipments = new MercadoPago\Shipments();
-$shipments->cost = $order->shipping_cost;
-$shipments->mode = 'not_specified';
-
-$preference->shipments = $shipments;
-
-// Crea un ítem en la preferencia
-foreach ($items as $product) {
-    $item = new MercadoPago\Item();
-    $item->title = $product->name;
-    $item->quantity = $product->qty;
-    $item->unit_price = $product->price;
-
-    $products[] = $item;
-}
-$preference = new MercadoPago\Preference();
-//...
-$preference->back_urls = [
-    'success' => route('orders.pay', $order),
-    'failure' => 'http://www.tu-sitio/failure',
-    'pending' => 'http://www.tu-sitio/pending',
-];
-$preference->auto_return = 'approved';
-// ...
-$preference->items = $products;
-$preference->save();
-
+    $preference->shipments = $shipments;
+    // Crea un ítem en la preferencia
+    
+    foreach ($items as $producto) {
+        $item = new MercadoPago\Item();
+        $item->title = $producto->name;
+        $item->quantity = $producto->qty;
+        $item->unit_price = $producto->price;
+        $products[] = $item;
+    }
+    $preference->back_urls = [
+        'success' => route('orders.pay', $order),
+        'failure' => route('orders.index'),
+        'pending' => route('orders.index'),
+    ];
+    $preference->auto_return = 'approved';
+    $preference->items = $products;
+    $preference->save();
+    
 @endphp
 
 <div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-5 gap-6 conteiner py-8">
@@ -124,7 +122,7 @@ $preference->save();
 
 
     </div>
-
+    <div id="wallet_container"></div>
     {{-- Total a pagar --}}
 
     <div class="order-1 lg:order-2 xl:col-span-2">
@@ -159,24 +157,24 @@ $preference->save();
 </div>
 
 @push('script')
+    {{-- SDK MercadoPago.js --}}
     <script src="https://sdk.mercadopago.com/js/v2"></script>
+
     <script src="https://www.paypal.com/sdk/js?client-id={{ config('services.paypal.client_id') }}"></script>
 
     <script>
-        const mp = new MercadoPago("{{ config('services.mercadopago.key') }}", {
-            locale: 'es-AR'
-        });
+        const mp = new MercadoPago("{{ config('services.mercadopago.key') }}");
+        const bricksBuilder = mp.bricks();
+    </script>
 
-        mp.checkout({
-            preference: {
-                id: '{{ $preference->id }}'
+    <script>
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: "{{ $preference->id }}",
             },
-            render: {
-                container: '.cho-container',
-                label: 'Pagar',
-            }
         });
     </script>
+
 
     <script>
         paypal.Buttons({
@@ -208,17 +206,17 @@ $preference->save();
 
                 return actions.order.capture().then(function(orderData) {
 
-                        Livewire.emit('payOrder');
-/*                     // Successful capture! For dev/demo purposes:
+                    Livewire.emit('payOrder');
+                    /*                     // Successful capture! For dev/demo purposes:
 
-                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                                        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
 
-                    const transaction = orderData.purchase_units[0].payments.captures[0];
+                                        const transaction = orderData.purchase_units[0].payments.captures[0];
 
-                    alert(
-                        `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`
-                        );
- */
+                                        alert(
+                                            `Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`
+                                            );
+                     */
                 });
 
             }

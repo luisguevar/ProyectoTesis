@@ -30,14 +30,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
-    'mercadopago' =>[
-            'key' => env('MP_PUBLIC_KEY'),
-            'token' => env('MP_ACCES_TOKEN'),
+    'mercadopago' => [
+        'key' => env('MP_PUBLIC_KEY'),
+        'token' => env('MP_ACCES_TOKEN'),
     ],
 
-    'paypal' =>[
+    'paypal' => [
         'client_id' => env('PAYPAL_CLIENT_ID'),
         'secret' => env('PAYPAL_SECRET'),
-],
+    ],
 
 ];
