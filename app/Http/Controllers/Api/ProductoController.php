@@ -14,4 +14,11 @@ class ProductoController extends Controller
 
         return response()->json($objetos);
     }
+
+    public function search($id){
+        $objetos = Product::select('id','name', 'slug')->where('id', $id)->get();
+
+        return response()->json($objetos);
+    }
+    
 }
