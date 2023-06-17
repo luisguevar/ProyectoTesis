@@ -10,6 +10,9 @@ use App\Models\Subcategory;
 use App\Models\Category;
 use TCPDF;
 
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\TopProductsExport;
+
 class ReportComponent extends Component
 {
 
@@ -116,5 +119,11 @@ class ReportComponent extends Component
 
         // Descargar el archivo PDF generado
         return response()->download(storage_path('app/reportes/reporte_productos_vendidos.pdf'));
+    }
+
+    public function generarExcel()
+    {
+        $export = new TopProductsExport($this->topProducts);
+        return Excel::download($export, 'reporte_productos_vendidos.xlsx');
     }
 }
