@@ -1,5 +1,3 @@
-
-
 @php
     
     // SDK de Mercado Pago
@@ -10,10 +8,10 @@
     // Crea un objeto de preferencia
     $preference = new MercadoPago\Preference();
     $shipments = new MercadoPago\Shipments();
-
+    
     $shipments->cost = $order->shipping_cost;
-    $shipments->mode = "not_specified";
-
+    $shipments->mode = 'not_specified';
+    
     $preference->shipments = $shipments;
     // Crea un ítem en la preferencia
     
@@ -39,8 +37,14 @@
     {{-- Contenido --}}
     <div class="order-2 lg:order-1 xl:col-span-3">
         <div class="bg-white rounded-lg shadow-lg px-6 py-4 mb-6">
-            <p class="text-gray-700 uppercase"><span class="font-semibold">Número de orden:</span>
-                Orden-{{ $order->id }}</p>
+            <div style="display: flex; justify-content: space-between;">
+                <p class="text-gray-700 uppercase">
+                    <span class="font-semibold">Número de orden:</span>
+                    Orden-{{ $order->id }}
+                </p>
+                <div id="wallet_container"></div>
+            </div>
+
         </div>
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <div class="grid grid-cols-2 gap-6 text-gray-700">
@@ -122,10 +126,10 @@
 
 
     </div>
-    <div id="wallet_container"></div>
+
     {{-- Total a pagar --}}
 
-    <div class="order-1 lg:order-2 xl:col-span-2">
+    {{--    <div class="order-1 lg:order-2 xl:col-span-2">
         <div class="bg-white rounded-lg shadow-lg px-6 pt-6 ">
             <div class=" flex justify-between items-center mb-4">
                 <img class="h-15 w-60" src="{{ asset('img/images.png') }}" alt="">
@@ -142,17 +146,13 @@
                         Pago: S/ {{ $order->total }}
                     </p>
 
-
-                    {{--  <div class="cho-container mt-4"></div> --}}
-
-
                 </div>
 
             </div>
             <div id="paypal-button-container"></div>
         </div>
 
-    </div>
+    </div> --}}
 
 </div>
 

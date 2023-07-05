@@ -12,48 +12,53 @@ use Gloudemans\Shoppingcart\Facades\Cart;
 class CreateOrder extends Component
 {
     public $envio_type = 1;
-    
-    public $contact, $phone, $address, $references, $shipping_cost=0;
 
-    public $departments, $cities =[], $districts =[];
-    
-    public $department_id = "" , $city_id = "", $district_id = "";
+    public $contact, $phone, $address, $references, $shipping_cost = 0;
 
-    public $rules =[
+    public $departments, $cities = [], $districts = [];
+
+    public $department_id = "", $city_id = "", $district_id = "";
+
+    public $rules = [
         'contact' => 'required',
         'phone' => 'required',
         'envio_type' => 'required'
     ];
 
-    public function mount(){
+    public function mount()
+    {
         $this->departments = Department::all();
     }
-    public function updatedEnvioType($value){
-        if($value == 1) //Si es "recojo en tienda"
+    public function updatedEnvioType($value)
+    {
+        if ($value == 1) //Si es "recojo en tienda"
         {
-            $this->resetValidation([ 'department_id','city_id', 'district_id', 'address', 'references']);
+            $this->resetValidation(['department_id', 'city_id', 'district_id', 'address', 'references']);
         }
     }
 
-    public function updatedDepartmentId($value){
-        $this->cities = City::where('department_id', $value )->get();
+    public function updatedDepartmentId($value)
+    {
+        $this->cities = City::where('department_id', $value)->get();
         $this->reset('city_id');
     }
 
-    public function updatedCityId($value){
+    public function updatedCityId($value)
+    {
 
         $city = City::find($value); //rccuperamos la ciudad
-        $this->shipping_cost = $city->cost; 
+        $this->shipping_cost = $city->cost;
 
-        $this->districts = District::where('city_id', $value )->get();
+        $this->districts = District::where('city_id', $value)->get();
         $this->reset('district_id');
     }
 
-    public function create_order(){
+    public function create_order()
+    {
 
         $rules = $this->rules;
 
-        if($this->envio_type == 2){
+        if ($this->envio_type == 2) {
             $rules['department_id'] = 'required';
             $rules['city_id'] = 'required';
             $rules['district_id'] = 'required';
@@ -62,7 +67,7 @@ class CreateOrder extends Component
         }
         $this->validate($rules);
 
-        $order = new Order();
+        /*  $order = new Order();
 
         $order->user_id = auth()->user()->id;
         $order->contact = $this->contact;
@@ -70,11 +75,28 @@ class CreateOrder extends Component
         $order->envio_type = $this->envio_type;
         $order->shipping_cost = 0;
         $order->total = $this->shipping_cost + Cart::subtotal();
+        $order->content = Cart::content(); */
+
+
+        $order = new Order();
+
+        $order->user_id = auth()->user()->id;
+        $order->contact = $this->contact;
+        $order->phone = $this->phone;
+        $order->envio_type = $this->envio_type;
+        $order->shipping_cost = 0;
+
+        $shipping_cost = is_numeric($this->shipping_cost) ? $this->shipping_cost : 0;
+        $subtotal = is_numeric(Cart::subtotal()) ? Cart::subtotal() : 0;
+
+        $order->total = $shipping_cost + $subtotal;
         $order->content = Cart::content();
+
+
         //new
         if ($this->envio_type == 2) {
             $order->shipping_cost =  $this->shipping_cost;
-           /*  $order->department_id = $this->department_id;
+            /*  $order->department_id = $this->department_id;
             $order->city_id = $this->city_id;
             $order->district_id = $this->district_id;
             $order->address = $this->address;
@@ -90,12 +112,12 @@ class CreateOrder extends Component
         }
 
         $order->save();
-        
+
         foreach (Cart::content() as $item) {
             discount($item);
         }
 
-        Cart::destroy(); 
+        Cart::destroy();
 
         return redirect()->route('orders.payment', $order);
     }

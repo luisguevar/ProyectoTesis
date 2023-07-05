@@ -100,7 +100,7 @@ class CreateCategory extends Component
         $this->validate();
 
         /* subir imagen */
-        $image = $this->createForm['image']->store('categories');
+        $image = $this->createForm['image']->store('public/categories');
 
         $category = Category::create([
             'name' => $this->createForm['name'],
@@ -154,7 +154,7 @@ class CreateCategory extends Component
             Storage::delete([ $this->editForm['image']]);
 
             /* Sube */
-            $this->editForm['image'] = $this->editImage->store('categories');
+            $this->editForm['image'] = $this->editImage->store('public/categories');
         }
             /* Actualizar todo menos marcas*/
             $this->category->update($this->editForm);

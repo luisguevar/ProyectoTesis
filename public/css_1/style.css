@@ -377,9 +377,9 @@ h1, h2, h3, h4, h5, h6,
   }
 }
 
-h2, .h2 {
+/* h2, .h2 {
   font-size: 2rem;
-}
+} */
 
 @media (max-width: 1200px) {
   h2, .h2 {
@@ -9770,3 +9770,9 @@ a.text-dark:hover, a.text-dark:focus {
   color: white;
 }
 
+.fixed-column {
+  width: 200px; /* Tamaño fijo para la columna */
+  white-space: nowrap; /* Evita que el texto se desborde */
+  overflow: hidden; /* Oculta el contenido sobrante */
+  text-overflow: ellipsis; /* Muestra puntos suspensivos (...) cuando el contenido se desborda */
+}
