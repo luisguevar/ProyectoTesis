@@ -29,14 +29,7 @@ Route::get('/search/{id}', [ProductoController::class, 'search']);
 
 Route::post('/orders', [ProductoController::class, 'store']);
 
-Route::get('/product/{id}/images', function ($id) {
-    $host = 'http://127.0.0.1:8000';
-    $product = Product::find($id);
-    $images = Image::where('imageable_id', $product->id)->get();
-    $imageUrls = $images->map(function ($image) use ($host) {
-        return $host . Storage::url($image->url);
-    });
-    return response()->json($imageUrls);
-});
+
+Route::get('/categorias', [ProductoController::class, 'CategoriaProductos']);
 
 
