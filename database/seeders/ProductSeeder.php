@@ -16,7 +16,7 @@ class ProductSeeder extends Seeder
      */
     public function run()
     {
-        Product::factory(250)->create()->each(function(Product $product){
+        Product::factory(10)->create()->each(function(Product $product){
 
             Image::factory(4)->create([
                 'imageable_id'=>$product->id,

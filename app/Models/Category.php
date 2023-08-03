@@ -10,21 +10,24 @@ class Category extends Model
     use HasFactory;
 
     //asignacion masiva
-    protected $fillable = ['name','slug','image','icon'];
+    protected $fillable = ['name', 'slug', 'image', 'icon'];
 
     //Relacion uno a muchos
-    public function subcategories(){
+    public function subcategories()
+    {
         return $this->hasMany(Subcategory::class);
     }
 
     //Relacion muchos a muchos
-    public function brands(){
+    public function brands()
+    {
         return $this->belongsToMany(Brand::class);
     }
 
     //relacion a traves de otra relacion
 
-    public function products(){
+    public function products()
+    {
         return $this->hasManyThrough(Product::class, Subcategory::class);
     }
 
@@ -33,4 +36,6 @@ class Category extends Model
     {
         return 'slug';
     }
+
+
 }

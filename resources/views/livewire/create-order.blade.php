@@ -1,4 +1,5 @@
 <div class="conteiner py-8 grid lg:grid-cols-2 xl:grid-cols-5 gap-6">
+
     <div class="order-2 lg:order-1 lg:col-span-1 xl:col-span-3">
         <div class="bg-white rounded-lg shadow p-6">
             <div class="mb-4">
@@ -96,12 +97,10 @@
 
         </div>
 
-
-
         {{-- Continuar con la compra --}}
         <div>
             <x-jet-button wire:loading.attr="disabled" wire:target="create_order" class="mt-6 mb-4"
-                wire:click="create_order">
+                wire:click="create_order" style="background-color: #08769a ; color: white;">
                 Continuar con la compra
             </x-jet-button>
             <hr>
@@ -175,3 +174,8 @@
         </div>
     </div>
 </div>
+
+
+
+
+

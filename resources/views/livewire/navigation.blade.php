@@ -1,11 +1,10 @@
-
 <header class="sticky top-0 " style="z-index: 900;  background-color: #08769a" x-data="dropdown()">
 
     <div class=" align-items-center bg-light bg-header-prenav py-3 px-xl-5 d-none d-lg-flex">
         <div class="col-lg-3">
             <a href="/" class="text-decoration-none">
 
-               <h1> <span class="text-uppercase text-logo px-2 ml-n1" style="font-size: 2.5rem;">LOGO AQUÍ</span></h1>
+                <h1> <span class="text-uppercase text-logo px-2 ml-n1" style="font-size: 2.5rem;">LOGO AQUÍ</span></h1>
             </a>
         </div>
         <div class="col-lg-7  col-lg-4 col-6 text-left">
@@ -94,146 +93,79 @@
 
         </div>
     </div>
-    <nav id="navigation-menu" x-show="open" :class="{ 'block': open, 'hidden': !open }"
-        class="bg-trueGray-700 bg-opacity-25 w-full absolute hidden">
-
-        {{-- Menu computadora --}}
-        <div x-on:click.away="close()" class="conteiner h-full hidden md:block">
-            <div x-show="open" x-on:click.away="open = false" class="grid grid-cols-4 h-full relative">
-
-                <ul class="bg-white">
-                    @foreach ($categories as $category)
-                        <li class="navigation-link text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                            <a href="{{ route('categories.show', $category) }}"
-                                class="py-2 px-4 text-sm flex items-center">
 
 
-                                <span class="flex justify-center w-9">
-                                    {!! $category->icon !!}
-                                </span>
-                                {{ $category->name }}
-                            </a>
-                            <div class="navigation-submenu bg-gray-100 absolute w-3/4 h-full top-0 right-0 hidden">
-                                <x-navigation-subcategories :category="$category" />
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-dark mb-30">
+
+        <div class="row px-xl-5">
+            <div class="col-lg-3 d-none d-lg-block">
+                <a class="btn d-flex align-items-center justify-content-between bg-primary w-100" data-toggle="collapse"
+                    href="#navbar-vertical" style="height: 65px; padding: 0 30px;">
+                    <h6 class="text-dark m-0"><i class="fa fa-bars mr-2"></i>Categories</h6>
+                    <i class="fa fa-angle-down text-dark"></i>
+                </a>
+                <nav class="collapse position-absolute navbar navbar-vertical navbar-light align-items-start p-0 bg-light"
+                    id="navbar-vertical" style="width: calc(100% - 30px); z-index: 999;">
+                    <div class="navbar-nav w-100">
+
+                        @foreach ($categories as $category)
+                            <div class="nav-item dropdown dropright">
+                                <a href="#" class="nav-link dropdown-toggle"
+                                    data-toggle="dropdown">{{ $category->name }} <i
+                                        class="fa fa-angle-right float-right mt-1"></i></a>
+                                <div class="dropdown-menu position-absolute rounded-0 border-0 m-0">
+                                    @foreach ($category->subcategories as $subcategory)
+                                        <a href="{{ route('categories.show', $category) . '?subcategoria=' . $subcategory->slug }}"
+                                            class="dropdown-item">{{ $subcategory->name }}</a>
+                                    @endforeach
+                                </div>
                             </div>
-
-                        </li>
-                    @endforeach
-
-                </ul>
-
-                <div class="col-span-3 bg-gray-100">
-                    <x-navigation-subcategories :category="$categories->first()" />
-
-                </div>
-            </div>
-        </div>
-
-        {{-- Menu pantalla pequeña --}}
-        <div class="bg-white h-full overflow-y-auto">
-            <div class="conteiner bg-gray-200 py-2">
-                @livewire('search')
-            </div>
-
-            <ul>
-                @foreach ($categories as $category)
-                    <div>
-                        <li class=" text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                            <a href="{{ route('categories.show', $category) }}"
-                                class="py-2 px-4 text-sm flex items-center">
-                                <span class="flex justify-center w-9">
-                                    {!! $category->icon !!}
-                                </span>
-                                {{ $category->name }}
-                            </a>
-                            <div class="navigation-submenu bg-gray-100 absolute w-3/4 h-full top-0 right-0 hidden">
-                                <x-navigation-subcategories :category="$category" />
-                            </div>
-
-                        </li>
+                        @endforeach
                     </div>
-                @endforeach
-            </ul>
+                </nav>
+            </div>
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                    <a href="" class="text-decoration-none d-block d-lg-none">
+                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
+                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                    </a>
+                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse"
+                        style="background-color: rgb(125, 124, 124);  border-radius: 5px;">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <div class="navbar-nav mr-auto py-0">
+                            <a href="index.html" class="nav-item nav-link">Header 1</a>
+                            <a href="detail.html" class="nav-item nav-link">Header 2</a>
+                            <a href="contact.html" class="nav-item nav-link">Header 3</a>
+                        </div>
+                        <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
+                            {{--  <a href="" class="btn px-0">
+                                <i class="fas fa-heart text-primary"></i>
+                                <span class="badge text-secondary border border-secondary rounded-circle"
+                                    style="padding-bottom: 2px;">0</span>
+                            </a> --}}
+                            <span class="btn px-0 ml-3">
+                                @livewire('dropdow-cart')
+                            </span>
 
-            <p class="text-trueGray-500 px-6 my-2 ">USUARIOS</p>
-            @livewire('cart-mobile')
-            @auth
-                <a href="{{ route('profile.show') }}"
-                    class="py-2 px-4 text-sm flex items-center text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                    <span class="flex justify-center w-9">
-                        <i class="far fa-address-card" aria-hidden="true"></i>
-                    </span>
-                    Perfil
-                </a>
-
-                <a href=""
-                    onclick="event.preventDefault();
-                            document.getElementById('logout-form').submit()"
-                    class="py-2 px-4 text-sm flex items-center text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                    <span class="flex justify-center w-9">
-                        <i class="fas fa-sign-out-alt"></i>
-                    </span>
-                    Cerrar Sesión
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
-                    @csrf
-                </form>
-            @else
-                <a href="{{ route('login') }}"
-                    class="py-2 px-4 text-sm flex items-center text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                    <span class="flex justify-center w-9">
-                        <i class="fas fa-user"></i>
-                    </span>
-                    Iniciar sesión
-                </a>
-
-                <a href="{{ route('register') }}"
-                    class="py-2 px-4 text-sm flex items-center text-trueGray-500 hover:bg-blue-500 hover:text-white">
-                    <span class="flex justify-center w-9">
-                        <i class="fas fa-fingerprint"></i>
-                    </span>
-                    Registrarse
-                </a>
-            @endauth
+                        </div>
+                    </div>
+                </nav>
+            </div>
         </div>
 
-
-
-
-    </nav>
-
-    <div class="bg-white flex justify-between items-center px-5">
-        <div>
-            <a :class="{ 'bg-opacity-100 text-blue-500': open }" x-on:click="show()"
-                class="flex flex-col items-center order-last md:order-first px-4 bg-white bg-opacity-25 justify-center text-white cursor-pointer font-semibold h-full">
-                <span class="container" style="color: gray">Categorias</span>
-            </a>
-        </div>
-
-        <div class="flex">
-            <div class="px-4 py-2">Inicio</div>
-            <div class="px-4 py-2">Venta por Teléfono</div>
-            <div class="px-4 py-2">Contáctanos</div>
-        </div>
-
-        <div class="ml-auto">
-            <div class="px-4 py-2">@livewire('dropdow-cart')</div>
-        </div>
     </div>
+    <!-- Navbar End -->
+
 
 
 
 
 </header>
 
-
-
-
-
-
-<!-- Navbar End -->
-
-
-<!-- Back to Top -->
-<a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+@push('script')
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+@endpush
